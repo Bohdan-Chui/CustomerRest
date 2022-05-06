@@ -24,7 +24,7 @@ public class SimpleExceptionController {
             EntityExistsException.class, EmptyResultDataAccessException.class, NullPointerException.class,
             CustomerDeletedException.class})
     public ResponseEntity<ApiError> handle(RuntimeException ex) {
-        log.error(ex.getMessage());
+        log.error(ex.getClass() +" : "+ ex.getMessage());
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST);
         error.setMessage(ex.getMessage());
 

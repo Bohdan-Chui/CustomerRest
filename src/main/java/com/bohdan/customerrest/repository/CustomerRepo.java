@@ -9,6 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
+
     Optional<Customer> getCustomerByEmail(String s);
+
     List<Customer> getCustomersByIsActive(Boolean isActive);
+
 }

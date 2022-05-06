@@ -55,7 +55,7 @@ public class CustomerController {
 
     @PutMapping
     public ResponseEntity<CustomerResponseDto> updateCustomer(@Valid @RequestBody CustomerPutDto customer) {
-        Customer response = customerService.updateCustomer(modelMapper.map(customer, Customer.class));
+        Customer response = customerService.putUpdateCustomer(modelMapper.map(customer, Customer.class));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

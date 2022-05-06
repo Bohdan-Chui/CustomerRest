@@ -15,8 +15,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Builder
 public class Customer implements Serializable {
 
     @Id
@@ -29,7 +31,7 @@ public class Customer implements Serializable {
     private LocalDateTime created;
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = true)
+    @Column(nullable = false)
     private LocalDateTime updated;
 
     private String fullName;

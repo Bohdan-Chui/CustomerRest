@@ -1,6 +1,7 @@
 package com.bohdan.customerrest.exception;
 
 public class CustomerDeletedException extends RuntimeException{
+
     public CustomerDeletedException() {
         super("Customer is deleted");
     }

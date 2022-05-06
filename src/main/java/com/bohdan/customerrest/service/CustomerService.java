@@ -59,8 +59,13 @@ public class CustomerService {
         return customerRepo.getCustomersByIsActive(true);
     }
 
+    /*
+    * Return customer by id if it is Active else threw exception
+    *
+    * @throw CustomerDeletedException
+    * */
     public Customer getCustomer(Long id) {
-        Customer customerResult = getCustomerById(id);
+        Customer customerResult = getActiveCustomer(id);
 
         if (Boolean.FALSE.equals(customerResult.getIsActive())) {
             throw new CustomerDeletedException(customerResult.getId());
@@ -68,9 +73,14 @@ public class CustomerService {
         return customerResult;
     }
 
-    public Customer getCustomerById(Long id) {
-        return customerRepo.findById(id).orElseThrow(() -> new NoSuchElementException("No user with id - " + id));
+    public Customer getActiveCustomer(Long id){
+        Customer repoCustomer = customerRepo.findById(id).orElseThrow(() -> new NoSuchElementException("No customer with id - " + id));
+        if(Boolean.FALSE.equals(repoCustomer.getIsActive())){
+            throw new CustomerDeletedException("No customer with " + id);
+        }
+        return repoCustomer;
     }
+
 
     /*
      * Set param isActive false to customer in database
@@ -79,18 +89,14 @@ public class CustomerService {
      * @throw NoSuchElementException
      * * */
     public void disableCustomerById(Long id) {
-        Optional<Customer> customerOptional = customerRepo.findById(id);
-        Customer customer = customerOptional.orElseThrow(
-                () -> new NoSuchElementException("no user with id - " + id));
-
+        Customer customer = getActiveCustomer(id);
         customer.setIsActive(false);
         Customer customerResult = customerRepo.save(customer);
         log.info("customer deactivated : " + customerResult);
     }
 
-    public Customer updateCustomer(Customer customer) {
-        Customer repoCustomer = customerRepo.findById(customer.getId())
-                .orElseThrow(() -> new NoSuchElementException("No user with id - " + customer.getId()));
+    public Customer putUpdateCustomer(Customer customer) {
+        Customer repoCustomer = getActiveCustomer(customer.getId());
 
         if (customer.getFullName() != null && customer.getPhone() != null) {
             repoCustomer.setFullName(customer.getFullName());
@@ -102,10 +108,8 @@ public class CustomerService {
             throw new IllegalArgumentException("Field name or phone is empty");
         }
     }
-
     public Customer patchUpdateCustomer(Customer customer) {
-        Customer repoCustomer = customerRepo.findById(customer.getId())
-                .orElseThrow(() -> new NoSuchElementException("No user with id - " + customer.getId()));
+        Customer repoCustomer = getActiveCustomer(customer.getId());
 
         if (customer.getFullName() != null) {
             repoCustomer.setFullName(customer.getFullName());
@@ -118,3 +122,4 @@ public class CustomerService {
         return customerResult;
     }
 }
+
