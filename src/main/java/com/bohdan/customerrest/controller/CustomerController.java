@@ -1,8 +1,9 @@
 package com.bohdan.customerrest.controller;
 
-import com.bohdan.customerrest.dto.CustomerDto;
-import com.bohdan.customerrest.dto.CustomerFullDto;
-import com.bohdan.customerrest.dto.CustomerIdDto;
+import com.bohdan.customerrest.dto.SaveCustomerDto;
+import com.bohdan.customerrest.dto.CustomerResponseDto;
+import com.bohdan.customerrest.dto.CustomerPatchDto;
+import com.bohdan.customerrest.dto.CustomerPutDto;
 import com.bohdan.customerrest.model.Customer;
 import com.bohdan.customerrest.service.CustomerService;
 import org.modelmapper.ModelMapper;
@@ -26,19 +27,19 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerFullDto> saveCustomer(@Valid @RequestBody CustomerDto customer) {
+    public ResponseEntity<CustomerResponseDto> saveCustomer(@Valid @RequestBody SaveCustomerDto customer) {
         Customer response = customerService.saveActiveCustomer(modelMapper.map(customer, Customer.class));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(response, CustomerFullDto.class));
+                .body(modelMapper.map(response, CustomerResponseDto.class));
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerFullDto>> getCustomers() {
-        List<CustomerFullDto> response = customerService.getCustomers()
+    public ResponseEntity<List<CustomerResponseDto>> getCustomers() {
+        List<CustomerResponseDto> response = customerService.getActiveCustomers()
                 .stream()
-                .map(n -> modelMapper.map(n, CustomerFullDto.class))
+                .map(n -> modelMapper.map(n, CustomerResponseDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -46,25 +47,36 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerFullDto> getCustomer(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable(name = "id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(modelMapper.map(customerService.getCustomer(id), CustomerFullDto.class));
+                .body(modelMapper.map(customerService.getCustomer(id), CustomerResponseDto.class));
     }
 
-    @PatchMapping
-    public ResponseEntity<CustomerFullDto> updateCustomer(@RequestBody CustomerIdDto customer) {
+    @PutMapping
+    public ResponseEntity<CustomerResponseDto> updateCustomer(@Valid @RequestBody CustomerPutDto customer) {
         Customer response = customerService.updateCustomer(modelMapper.map(customer, Customer.class));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(response, CustomerFullDto.class));
+                .body(modelMapper.map(response, CustomerResponseDto.class));
+    }
+
+    @PatchMapping
+    public ResponseEntity<CustomerResponseDto> patchUpdateCustomer(@Valid @RequestBody CustomerPatchDto customer) {
+        Customer response = customerService.patchUpdateCustomer(modelMapper.map(customer, Customer.class));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(modelMapper.map(response, CustomerResponseDto.class));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable(name = "id") Long id) {
         customerService.deleteCustomerById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .ok()
+                .build();
 
     }
 }

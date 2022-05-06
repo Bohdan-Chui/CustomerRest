@@ -1,32 +1,57 @@
 package com.bohdan.customerrest.model;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Customer implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "bigint")
-    Long id;
+    private Long id;
 
-    @Column(columnDefinition = "bigint")
-    Integer created;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime created;
 
-    @Column(columnDefinition = "bigint")
-    Integer updated;
+    @LastModifiedDate
+    @Column(nullable = false, updatable = true)
+    private LocalDateTime updated;
 
-    String fullName;
+    private String fullName;
 
     @Column(unique = true)
-    String email;
+    private String email;
 
-    String phone;
+    private String phone;
 
     @Column(columnDefinition = "boolean default true")
-    Boolean isActive;
+    private Boolean isActive;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Customer customer = (Customer) o;
+        return id != null && Objects.equals(id, customer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

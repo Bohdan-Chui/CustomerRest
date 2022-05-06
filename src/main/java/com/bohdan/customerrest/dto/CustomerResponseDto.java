@@ -2,16 +2,16 @@ package com.bohdan.customerrest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CustomerFullDto {
+public class CustomerResponseDto {
     @JsonProperty("id")
-    Long id;
+    private Long id;
 
     @JsonProperty("fullName")
-    String fullName;
+    private String fullName;
 
     @JsonProperty("email")
-    String email;
+    private String email;
 
     @JsonProperty("phone")
-    String phone;
+    private String phone;
 }

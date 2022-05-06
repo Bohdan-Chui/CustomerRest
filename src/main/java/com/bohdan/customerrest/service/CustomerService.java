@@ -27,34 +27,52 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(Customer customer) {
-        if(customerRepo.getCustomerByEmail(customer.getEmail()).isPresent())
-            throw new EntityExistsException("Customer is already present with this email");
+        if (customerRepo.getCustomerByEmail(customer.getEmail()).isPresent()) {
+            throw new EntityExistsException("Customer is already present with email - " + customer.getEmail());
+        }
         return customerRepo.save(customer);
     }
 
-    public List<Customer> getCustomers() {
-        return customerRepo.findAll();
+    public List<Customer> getActiveCustomers() {
+        return customerRepo.getCustomersByIsActive(true);
     }
 
     public Customer getCustomer(Long id) {
-        return customerRepo.findById(id).orElseThrow(()->new NoSuchElementException("no user with this id"));
+        return customerRepo.findById(id).orElseThrow(() -> new NoSuchElementException("No user with id - " + id));
     }
 
     public void deleteCustomerById(Long id) {
         Optional<Customer> customerOptional = customerRepo.findById(id);
         Customer customer = customerOptional.orElseThrow(
-                ()->new NoSuchElementException("no user with this id"));
+                () -> new NoSuchElementException("no user with id - " + id));
 
         customer.setIsActive(false);
         customerRepo.save(customer);
     }
 
     public Customer updateCustomer(Customer customer) {
-        Customer savedCustomer = customerRepo.findById(customer.getId())
-                .orElseThrow(()->new NoSuchElementException("no user with this id"));
+        Customer repoCustomer = customerRepo.findById(customer.getId())
+                .orElseThrow(() -> new NoSuchElementException("No user with id - " + customer.getId()));
 
-        savedCustomer.setFullName(customer.getFullName());
-        savedCustomer.setPhone(customer.getPhone());
-        return customerRepo.save(savedCustomer);
+        if (customer.getFullName() != null && customer.getPhone() != null) {
+            repoCustomer.setFullName(customer.getFullName());
+            repoCustomer.setPhone(customer.getPhone());
+            return customerRepo.save(repoCustomer);
+        } else {
+            throw new IllegalArgumentException("Field name or phone is empty");
+        }
+    }
+
+    public Customer patchUpdateCustomer(Customer customer) {
+        Customer repoCustomer = customerRepo.findById(customer.getId())
+                .orElseThrow(() -> new NoSuchElementException("No user with id - " + customer.getId()));
+
+        if (customer.getFullName() != null) {
+            repoCustomer.setFullName(customer.getFullName());
+        }
+        if (customer.getPhone() != null) {
+            repoCustomer.setPhone(customer.getPhone());
+        }
+        return customerRepo.save(repoCustomer);
     }
 }
