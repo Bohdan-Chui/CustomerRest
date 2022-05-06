@@ -24,7 +24,7 @@ public class SimpleExceptionController {
             EntityExistsException.class, EmptyResultDataAccessException.class, NullPointerException.class,
             CustomerDeletedException.class})
     public ResponseEntity<ApiError> handle(RuntimeException ex) {
-        log.error(ex);
+        log.error(ex.getMessage());
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST);
         error.setMessage(ex.getMessage());
 
@@ -37,7 +37,7 @@ public class SimpleExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({MappingException.class, ConfigurationException.class})
     public ResponseEntity<ApiError> handleRuntime(RuntimeException ex) {
-        log.error(ex);
+        log.error(ex.getMessage());
         ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
         error.setMessage(ex.getMessage());
 

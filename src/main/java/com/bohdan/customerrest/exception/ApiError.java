@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /*
- * Class represents entity for response to user
+ * Class represents entity for response exceptions to user
  *
  * */
 @Getter

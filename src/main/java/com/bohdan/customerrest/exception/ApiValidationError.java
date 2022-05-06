@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /*
- * Class represents form for response to user
+ * Class represents exception form for response to user
  * */
 @Data
 @EqualsAndHashCode(callSuper = false)
