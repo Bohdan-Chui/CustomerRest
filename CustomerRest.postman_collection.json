@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fullName\": \"namesecond\",\n    \"email\": \"hgj@sda.das\"\n\n}",
+					"raw": "{\n    \"fullName\": \"nam4esecond\",\n    \"email\": \"nabogch@sfdd.das\",\n    \"phone\":\"+380732432323\"\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,7 +40,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/customers/3",
+					"raw": "http://localhost:8080/api/customers/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -49,7 +49,7 @@
 					"path": [
 						"api",
 						"customers",
-						"3"
+						"5"
 					]
 				}
 			},
@@ -103,7 +103,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\":\"1\",\n    \"fullName\": \"fffffffff\",\n    \"phone\": \"3213123\"\n}",
+					"raw": "{\n    \"id\":\"1\",\n    \"fullName\": \"put\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -120,6 +120,36 @@
 					"path": [
 						"api",
 						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"1\",\n    \"fullName\": \"put\",\n    \"phone\":\"+38057777323\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/customers/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						""
 					]
 				}
 			},
