@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 public class SimpleExceptionController {
 
     @ExceptionHandler({EntityExistsException.class, NoSuchElementException.class, IllegalArgumentException.class,
-            EntityExistsException.class, EmptyResultDataAccessException.class, NullPointerException.class})
+            EntityExistsException.class, EmptyResultDataAccessException.class, NullPointerException.class,
+            CustomerDeletedException.class})
     public ResponseEntity<ApiError> handle(RuntimeException ex) {
         log.error(ex);
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST);
@@ -48,7 +49,7 @@ public class SimpleExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
-        log.error(ex);
+        log.error(ex.getMessage());
         ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
         error.setSubErrors(ex.getBindingResult().getAllErrors().stream().map(exception -> ApiValidationError
                         .builder()

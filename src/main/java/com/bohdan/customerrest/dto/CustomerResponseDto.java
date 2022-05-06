@@ -3,6 +3,7 @@ package com.bohdan.customerrest.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CustomerResponseDto {
+
     @JsonProperty("id")
     private Long id;
 
